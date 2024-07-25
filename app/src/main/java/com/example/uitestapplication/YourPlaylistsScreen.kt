@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -27,8 +28,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,21 +43,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun YourPlaylistsScreen(onPlaylistClick: (String) -> Unit) {
-    val showDialog = remember { mutableStateOf(false) }
-    val playlistName = remember { mutableStateOf("") }
+fun YourPlaylistsScreen(
+    playlists: List<Playlist>,
+    onPlaylistClick: (String) -> Unit,
+    onCreatePlaylistClick: (String) -> Unit,
+    onBackClick: () -> Unit
+) {
+    var showDialog by remember { mutableStateOf(false) }
+    var playlistName by remember { mutableStateOf("") }
 
-    if (showDialog.value) {
+    if (showDialog) {
         CreatePlaylistDialog(
-            onDismiss = { showDialog.value = false },
+            onDismiss = { showDialog = false },
             onConfirm = {
-                // Handle the creation of the new playlist
-                showDialog.value = false
-                // Navigate to the new EmptyPlaylistScreen
-                onPlaylistClick(playlistName.value)
+                onCreatePlaylistClick(playlistName)
+                showDialog = false
             },
-            playlistName = playlistName.value,
-            onNameChange = { playlistName.value = it }
+            playlistName = playlistName,
+            onNameChange = { playlistName = it }
         )
     }
 
@@ -76,7 +82,7 @@ fun YourPlaylistsScreen(onPlaylistClick: (String) -> Unit) {
                 tint = Color.White,
                 modifier = Modifier
                     .padding(end = 8.dp)
-                    .clickable { /* Handle back navigation */ }
+                    .clickable { onBackClick() } // Handle back navigation
             )
             Text(
                 text = "Your Playlists",
@@ -93,7 +99,7 @@ fun YourPlaylistsScreen(onPlaylistClick: (String) -> Unit) {
 
         // Number of Playlists
         Text(
-            text = "5 Playlists",
+            text = "${playlists.size} Playlists",
             color = Color.White,
             fontSize = 20.sp,
             modifier = Modifier
@@ -111,7 +117,7 @@ fun YourPlaylistsScreen(onPlaylistClick: (String) -> Unit) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .clickable { showDialog.value = true } // Show dialog on click
+                .clickable { showDialog = true } // Show dialog on click
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.add_box),
@@ -137,17 +143,15 @@ fun YourPlaylistsScreen(onPlaylistClick: (String) -> Unit) {
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
         ) {
-            items(5) { index ->
-                if (index > 0) {
-                    Divider(color = Color.Gray, thickness = 1.dp)
-                }
+            items(playlists) { playlist ->
                 PlaylistItem(
-                    playlistName = "Playlist ${index + 1}",
-                    numberOfSongs = (index + 1) * 5,
+                    playlistName = playlist.name,
+                    numberOfSongs = playlist.songs.size,
                     playlistBg = painterResource(id = R.drawable.playlist_bg),
                     playIcon = painterResource(id = R.drawable.play_circle),
-                    onClick = { onPlaylistClick("Playlist ${index + 1}") } // Navigate to playlist screen
+                    onClick = { onPlaylistClick(playlist.name) } // Navigate to playlist screen
                 )
+                Divider(color = Color.Gray, thickness = 1.dp)
             }
         }
     }
@@ -175,7 +179,7 @@ fun PlaylistItem(
                 .clip(RoundedCornerShape(8.dp))
                 .border(1.dp, Color.Gray, RoundedCornerShape(8.dp)) // Thin shadow-like outline
         ) {
-            // First Image (Square)
+            // Playlist Background Image
             Image(
                 painter = playlistBg,
                 contentDescription = "Playlist Background",
@@ -184,7 +188,7 @@ fun PlaylistItem(
                     .clip(RoundedCornerShape(8.dp))
             )
 
-            // Second Image (Smaller, Bottom Right)
+            // Play Icon (Smaller, Bottom Right)
             Image(
                 painter = playIcon,
                 contentDescription = "Play Icon",
@@ -195,7 +199,7 @@ fun PlaylistItem(
             )
         }
 
-        Spacer(modifier = Modifier.width(30.dp))
+        Spacer(modifier = Modifier.width(16.dp))
 
         Column(
             verticalArrangement = Arrangement.Center,
@@ -206,12 +210,12 @@ fun PlaylistItem(
             Text(
                 text = playlistName,
                 color = Color.White,
-                fontSize = 25.sp
+                fontSize = 20.sp
             )
             Text(
                 text = "$numberOfSongs songs",
                 color = Color.White.copy(alpha = 0.7f),
-                fontSize = 18.sp
+                fontSize = 16.sp
             )
         }
 
@@ -223,7 +227,7 @@ fun PlaylistItem(
             contentDescription = "Arrow Forward",
             tint = Color.White,
             modifier = Modifier
-                .size(30.dp) // Smaller size for the arrow icon
+                .size(24.dp) // Adjusted size for the arrow icon
                 .align(Alignment.CenterVertically)
                 .padding(end = 8.dp) // Add padding to the right end
         )

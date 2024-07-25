@@ -92,37 +92,51 @@ fun EmptyPlaylistScreen(
 
         Spacer(modifier = Modifier.height(30.dp))
 
-        Image(
-            painter = musicRecordPlayer,
-            contentDescription = "Music Record Player",
+        Box(
             modifier = Modifier
-                .size(150.dp) // Size of the image
-                .clip(RoundedCornerShape(30.dp))
-                .align(Alignment.CenterHorizontally) // Center horizontally
-        )
-
-        Spacer(modifier = Modifier.height(30.dp))
-
-        Text(
-            text = "No Songs",
-            fontSize = 20.sp,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = onAddSongsClick,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .clip(RoundedCornerShape(8.dp)), // Rounded corners
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF30414E), // Custom color for button background
-                contentColor = Color.White // White text color
-            )
+                .weight(1f)
+                .padding(16.dp)
+                .background(Color.DarkGray, shape = RoundedCornerShape(8.dp))
+                .border(2.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
         ) {
-            Text(text = "ADD SONGS", fontSize = 18.sp) // Increased font size of the button text
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Image(
+                    painter = musicRecordPlayer,
+                    contentDescription = "Music Record Player",
+                    modifier = Modifier
+                        .size(150.dp) // Size of the image
+                        .clip(RoundedCornerShape(30.dp))
+                        .align(Alignment.CenterHorizontally) // Center horizontally
+                )
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Text(
+                    text = "No Songs",
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = onAddSongsClick,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .clip(RoundedCornerShape(8.dp)), // Rounded corners
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF30414E), // Custom color for button background
+                        contentColor = Color.White // White text color
+                    )
+                ) {
+                    Text(text = "ADD SONGS", fontSize = 18.sp) // Increased font size of the button text
+                }
+            }
         }
     }
 }

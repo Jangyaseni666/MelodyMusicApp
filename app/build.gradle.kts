@@ -73,4 +73,7 @@ dependencies {
     //implementation("com.google.android.libraries.navigation:navigation:5.4.0")
     implementation("androidx.compose.animation:animation:1.5.1") // Align with Compose version
     implementation("androidx.navigation:navigation-compose:2.5.0")
+    implementation("com.google.dagger:hilt-android:2.45")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    //kapt("com.google.dagger:hilt-compiler:2.45")
 }

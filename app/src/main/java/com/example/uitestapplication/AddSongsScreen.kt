@@ -35,10 +35,11 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun AddSongsScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onAddSong: (Song) -> Unit
 ) {
     // Initialize state and data
-    val songList = remember { mutableStateListOf(*Array(20) { index -> Song(songName = "Song ${index + 1}") }) }
+    val songList = remember { mutableStateListOf(*Array(20) { index -> Song(id = index, songName = "Song ${index + 1}") }) }
 
     // Calculate the number of checked songs
     val numberOfCheckedSongs = songList.count { it.isChecked }
@@ -92,6 +93,9 @@ fun AddSongsScreen(
                     val index = songList.indexOf(song)
                     if (index != -1) {
                         songList[index] = updatedSong
+                        if (updatedSong.isChecked) {
+                            onAddSong(updatedSong)
+                        }
                     }
                 })
             }
@@ -134,5 +138,3 @@ fun SongItem(song: Song, onToggleCheck: (Song) -> Unit) {
         )
     }
 }
-
-data class Song(val songName: String, val isChecked: Boolean = false)
