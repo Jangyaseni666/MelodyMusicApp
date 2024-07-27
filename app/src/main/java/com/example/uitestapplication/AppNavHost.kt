@@ -32,9 +32,9 @@ fun AppNavHost(
                     val playlist = playlists.find { it.id == playlistId }
                     if (playlist != null) {
                         if (playlist.songs.isEmpty()) {
-                            navController.navigate("empty_playlist/${playlistId}")
+                            navController.navigate("empty_playlist/$playlistId")
                         } else {
-                            navController.navigate("filled_playlist/${playlistId}")
+                            navController.navigate("filled_playlist/$playlistId")
                         }
                     }
                 },
@@ -77,7 +77,16 @@ fun AppNavHost(
 
             if (playlist != null) {
                 AddSongsScreen(
-                    onBackClick = { navController.popBackStack() },
+                    onBackClick = { hasSelectedSongs ->
+                        if (hasSelectedSongs) {
+                            navController.navigate("filled_playlist/$playlistId") {
+                                // Clear the back stack to avoid navigating back to the add songs screen
+                                popUpTo("filled_playlist/$playlistId") { inclusive = true }
+                            }
+                        } else {
+                            navController.popBackStack()
+                        }
+                    },
                     onAddSong = { song -> playlistViewModel.addSongToPlaylist(playlistId, song) }
                 )
             } else {

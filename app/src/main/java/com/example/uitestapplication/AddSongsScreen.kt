@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun AddSongsScreen(
-    onBackClick: () -> Unit,
+    onBackClick: (hasSelectedSongs: Boolean) -> Unit,
     onAddSong: (Song) -> Unit
 ) {
     val songList = remember { mutableStateListOf(*Array(20) { index -> Song(id = index.toString(), songName = "Song ${index + 1}") }) }
@@ -59,7 +59,10 @@ fun AddSongsScreen(
             horizontalArrangement = Arrangement.Start
         ) {
             IconButton(
-                onClick = onBackClick,
+                onClick = {
+                    // Notify that the back button was clicked and pass whether songs are selected
+                    onBackClick(numberOfCheckedSongs > 0)
+                },
                 modifier = Modifier
                     .size(48.dp) // Increase the size of the back arrow
             ) {
@@ -131,3 +134,4 @@ fun SongItem(song: Song, onToggleCheck: (Song) -> Unit) {
         )
     }
 }
+
