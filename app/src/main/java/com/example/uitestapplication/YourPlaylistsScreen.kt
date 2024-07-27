@@ -41,9 +41,11 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 @Composable
 fun YourPlaylistsScreen(
+    navController: NavHostController,  // Add this parameter
     playlists: List<Playlist>,
     onCreatePlaylistClick: (String) -> Unit,
     onPlaylistClick: (String) -> Unit,
@@ -60,7 +62,6 @@ fun YourPlaylistsScreen(
             onConfirm = {
                 if (playlistName.isNotBlank()) {
                     onCreatePlaylistClick(playlistName)
-                    // Clear the playlistName after creation
                     playlistName = ""
                     showDialog = false
                 }
@@ -168,13 +169,20 @@ fun YourPlaylistsScreen(
                     numberOfSongs = playlist.songs.size,
                     playlistBg = painterResource(id = R.drawable.playlist_bg),
                     playIcon = painterResource(id = R.drawable.play_circle),
-                    onClick = { onPlaylistClick(playlist.id) }
+                    onClick = {
+                        if (playlist.songs.isEmpty()) {
+                            navController.navigate("empty_playlist/${playlist.id}")
+                        } else {
+                            navController.navigate("filled_playlist/${playlist.id}")
+                        }
+                    }
                 )
                 Divider(color = Color.Gray, thickness = 1.dp)
             }
         }
     }
 }
+
 
 @Composable
 fun PlaylistItem(

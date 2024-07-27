@@ -23,12 +23,20 @@ fun AppNavHost(
     NavHost(navController = navController, startDestination = "your_playlists") {
         composable("your_playlists") {
             YourPlaylistsScreen(
+                navController = navController,  // Pass the navController
                 playlists = playlists,
                 onCreatePlaylistClick = { playlistName ->
                     playlistViewModel.addPlaylist(playlistName)
                 },
                 onPlaylistClick = { playlistId ->
-                    navController.navigate("empty_playlist/$playlistId")
+                    val playlist = playlists.find { it.id == playlistId }
+                    if (playlist != null) {
+                        if (playlist.songs.isEmpty()) {
+                            navController.navigate("empty_playlist/${playlistId}")
+                        } else {
+                            navController.navigate("filled_playlist/${playlistId}")
+                        }
+                    }
                 },
                 onBackClick = { navController.popBackStack() },
                 showSuccessDialog = showSuccessDialog,
@@ -43,6 +51,20 @@ fun AppNavHost(
                 EmptyPlaylistScreen(
                     onBackClick = { navController.popBackStack() },
                     playlistName = playlist.name,
+                    onAddSongsClick = { navController.navigate("add_songs/$playlistId") }
+                )
+            } else {
+                Text("Playlist not found")
+            }
+        }
+        composable("filled_playlist/{playlistId}") { backStackEntry ->
+            val playlistId = backStackEntry.arguments?.getString("playlistId") ?: ""
+            val playlist = playlists.find { it.id == playlistId }
+
+            if (playlist != null) {
+                FilledPlaylistScreen(
+                    playlistId = playlistId,
+                    onBackClick = { navController.popBackStack() },
                     onAddSongsClick = { navController.navigate("add_songs/$playlistId") }
                 )
             } else {
