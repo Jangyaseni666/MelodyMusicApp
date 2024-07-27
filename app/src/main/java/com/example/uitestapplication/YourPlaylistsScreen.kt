@@ -45,9 +45,11 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun YourPlaylistsScreen(
     playlists: List<Playlist>,
-    onPlaylistClick: (String) -> Unit,
     onCreatePlaylistClick: (String) -> Unit,
-    onBackClick: () -> Unit
+    onPlaylistClick: (String) -> Unit,
+    onBackClick: () -> Unit,
+    showSuccessDialog: Boolean,
+    onDismissSuccessDialog: () -> Unit
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var playlistName by remember { mutableStateOf("") }
@@ -56,11 +58,28 @@ fun YourPlaylistsScreen(
         CreatePlaylistDialog(
             onDismiss = { showDialog = false },
             onConfirm = {
-                onCreatePlaylistClick(playlistName)
-                showDialog = false
+                if (playlistName.isNotBlank()) {
+                    onCreatePlaylistClick(playlistName)
+                    // Clear the playlistName after creation
+                    playlistName = ""
+                    showDialog = false
+                }
             },
             playlistName = playlistName,
             onNameChange = { playlistName = it }
+        )
+    }
+
+    if (showSuccessDialog) {
+        AlertDialog(
+            onDismissRequest = onDismissSuccessDialog,
+            title = { Text("Success") },
+            text = { Text("Playlist created successfully!") },
+            confirmButton = {
+                TextButton(onClick = onDismissSuccessDialog) {
+                    Text("OK")
+                }
+            }
         )
     }
 
@@ -81,8 +100,8 @@ fun YourPlaylistsScreen(
                 contentDescription = "Back",
                 tint = Color.White,
                 modifier = Modifier
+                    .clickable { onBackClick() }
                     .padding(end = 8.dp)
-                    .clickable { onBackClick() } // Handle back navigation
             )
             Text(
                 text = "Your Playlists",
@@ -117,7 +136,7 @@ fun YourPlaylistsScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
-                .clickable { showDialog = true } // Show dialog on click
+                .clickable { showDialog = true }
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.add_box),
@@ -126,9 +145,9 @@ fun YourPlaylistsScreen(
                 modifier = Modifier.padding(end = 8.dp)
             )
             Text(
-                text = "Create new",
+                text = "Create New",
                 color = Color.White,
-                fontSize = 25.sp
+                fontSize = 20.sp
             )
         }
 
@@ -149,7 +168,7 @@ fun YourPlaylistsScreen(
                     numberOfSongs = playlist.songs.size,
                     playlistBg = painterResource(id = R.drawable.playlist_bg),
                     playIcon = painterResource(id = R.drawable.play_circle),
-                    onClick = { onPlaylistClick(playlist.name) } // Navigate to playlist screen
+                    onClick = { onPlaylistClick(playlist.id) }
                 )
                 Divider(color = Color.Gray, thickness = 1.dp)
             }
@@ -170,16 +189,16 @@ fun PlaylistItem(
             .fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable { onClick() }
-            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp)) // Add elevation effect
-            .padding(8.dp)
+            .shadow(elevation = 4.dp, shape = RoundedCornerShape(8.dp))
+            .background(Color.Black)
+            .clip(RoundedCornerShape(8.dp))
     ) {
         Box(
             modifier = Modifier
                 .size(80.dp)
                 .clip(RoundedCornerShape(8.dp))
-                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp)) // Thin shadow-like outline
+                .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
         ) {
-            // Playlist Background Image
             Image(
                 painter = playlistBg,
                 contentDescription = "Playlist Background",
@@ -188,14 +207,13 @@ fun PlaylistItem(
                     .clip(RoundedCornerShape(8.dp))
             )
 
-            // Play Icon (Smaller, Bottom Right)
             Image(
                 painter = playIcon,
                 contentDescription = "Play Icon",
                 modifier = Modifier
                     .size(40.dp)
                     .align(Alignment.BottomEnd)
-                    .padding(8.dp) // Padding to avoid overlap with the edge
+                    .padding(8.dp)
             )
         }
 
@@ -213,23 +231,20 @@ fun PlaylistItem(
                 fontSize = 20.sp
             )
             Text(
-                text = "$numberOfSongs songs",
+                text = "$numberOfSongs Songs",
                 color = Color.White.copy(alpha = 0.7f),
                 fontSize = 16.sp
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f)) // Push the arrow forward icon to the end
-
-        // Arrow Forward Icon
         Icon(
             painter = painterResource(id = R.drawable.arrow_forward),
             contentDescription = "Arrow Forward",
             tint = Color.White,
             modifier = Modifier
-                .size(24.dp) // Adjusted size for the arrow icon
+                .size(24.dp)
                 .align(Alignment.CenterVertically)
-                .padding(end = 8.dp) // Add padding to the right end
+                .padding(end = 8.dp)
         )
     }
 }
@@ -243,22 +258,23 @@ fun CreatePlaylistDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = {
-            Text(text = "Create new")
-        },
+        title = { Text(text = "Create New Playlist") },
         text = {
             Column {
                 OutlinedTextField(
                     value = playlistName,
                     onValueChange = onNameChange,
-                    label = { Text("Enter playlist name") },
-                    placeholder = { Text("Playlist name") },
+                    label = { Text("Enter Playlist Name") },
+                    placeholder = { Text("Playlist Name") },
                     singleLine = true
                 )
             }
         },
         confirmButton = {
-            Row {
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.padding(all = 8.dp)
+            ) {
                 TextButton(onClick = onDismiss) {
                     Text("Cancel")
                 }

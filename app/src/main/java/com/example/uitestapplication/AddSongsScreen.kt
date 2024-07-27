@@ -26,9 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,10 +36,8 @@ fun AddSongsScreen(
     onBackClick: () -> Unit,
     onAddSong: (Song) -> Unit
 ) {
-    // Initialize state and data
-    val songList = remember { mutableStateListOf(*Array(20) { index -> Song(id = index, songName = "Song ${index + 1}") }) }
+    val songList = remember { mutableStateListOf(*Array(20) { index -> Song(id = index.toString(), songName = "Song ${index + 1}") }) }
 
-    // Calculate the number of checked songs
     val numberOfCheckedSongs = songList.count { it.isChecked }
     val displayText = if (numberOfCheckedSongs > 0) {
         "$numberOfCheckedSongs song${if (numberOfCheckedSongs > 1) "s" else ""} added"
@@ -55,7 +51,6 @@ fun AddSongsScreen(
             .background(Color.Black)
             .padding(16.dp)
     ) {
-        // Row containing the back button and the title
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -69,7 +64,7 @@ fun AddSongsScreen(
                     .size(48.dp) // Increase the size of the back arrow
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.arrow_back), // Replace with your back arrow image
+                    painter = painterResource(id = R.drawable.arrow_back),
                     contentDescription = "Back",
                     tint = Color.White
                 )
@@ -86,7 +81,6 @@ fun AddSongsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // List of existing songs
         LazyColumn {
             items(songList) { song ->
                 SongItem(song = song, onToggleCheck = { updatedSong ->
@@ -106,18 +100,17 @@ fun AddSongsScreen(
 @Composable
 fun SongItem(song: Song, onToggleCheck: (Song) -> Unit) {
     var isChecked by remember { mutableStateOf(song.isChecked) }
-    val checkImage: Painter = painterResource(id = if (isChecked) R.drawable.check else R.drawable.add)
+    val checkImage = painterResource(id = if (isChecked) R.drawable.check else R.drawable.add)
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp) // Slightly reduced space between items
-            .shadow(4.dp, shape = RoundedCornerShape(8.dp))
+            .padding(4.dp)
             .background(Color.DarkGray, shape = RoundedCornerShape(8.dp))
             .clickable {
                 isChecked = !isChecked
                 onToggleCheck(song.copy(isChecked = isChecked))
-            } // Toggle check on click
+            }
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -125,7 +118,7 @@ fun SongItem(song: Song, onToggleCheck: (Song) -> Unit) {
             text = song.songName,
             color = Color.White,
             fontSize = 18.sp,
-            modifier = Modifier.weight(1f) // Take available space
+            modifier = Modifier.weight(1f)
         )
 
         Spacer(modifier = Modifier.width(8.dp))
@@ -133,7 +126,7 @@ fun SongItem(song: Song, onToggleCheck: (Song) -> Unit) {
         Icon(
             painter = checkImage,
             contentDescription = if (isChecked) "Checked" else "Unchecked",
-            tint = Color.White, // Keep icon white
+            tint = Color.White,
             modifier = Modifier.size(24.dp)
         )
     }

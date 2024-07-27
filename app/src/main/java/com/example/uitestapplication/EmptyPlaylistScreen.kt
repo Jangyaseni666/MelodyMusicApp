@@ -38,7 +38,6 @@ fun EmptyPlaylistScreen(
     playlistName: String,
     onAddSongsClick: () -> Unit
 ) {
-    // Load images directly within the composable
     val playlistBg = painterResource(id = R.drawable.playlist_bg)
     val musicRecordPlayer = painterResource(id = R.drawable.music_record_player)
 
@@ -51,7 +50,7 @@ fun EmptyPlaylistScreen(
         IconButton(
             onClick = onBackClick,
             modifier = Modifier
-                .size(48.dp) // Increase the size of the back arrow
+                .size(48.dp)
                 .align(Alignment.Start)
         ) {
             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
@@ -65,7 +64,7 @@ fun EmptyPlaylistScreen(
         ) {
             Box(
                 modifier = Modifier
-                    .size(100.dp) // Increased size of playlist background image
+                    .size(100.dp)
                     .clip(RoundedCornerShape(8.dp))
                     .border(1.dp, Color.Gray, RoundedCornerShape(8.dp))
             ) {
@@ -83,8 +82,8 @@ fun EmptyPlaylistScreen(
             Text(
                 text = playlistName,
                 color = Color.White,
-                fontSize = 24.sp, // Increased font size of the playlist name
-                modifier = Modifier.weight(1f) // Make sure it takes available space
+                fontSize = 24.sp,
+                modifier = Modifier.weight(1f)
             )
         }
 
@@ -108,9 +107,9 @@ fun EmptyPlaylistScreen(
                     painter = musicRecordPlayer,
                     contentDescription = "Music Record Player",
                     modifier = Modifier
-                        .size(150.dp) // Size of the image
+                        .size(150.dp)
                         .clip(RoundedCornerShape(30.dp))
-                        .align(Alignment.CenterHorizontally) // Center horizontally
+                        .align(Alignment.CenterHorizontally)
                 )
 
                 Spacer(modifier = Modifier.height(30.dp))
@@ -128,13 +127,13 @@ fun EmptyPlaylistScreen(
                     onClick = onAddSongsClick,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
-                        .clip(RoundedCornerShape(8.dp)), // Rounded corners
+                        .clip(RoundedCornerShape(8.dp)),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF30414E), // Custom color for button background
-                        contentColor = Color.White // White text color
+                        containerColor = Color(0xFF30414E),
+                        contentColor = Color.White
                     )
                 ) {
-                    Text(text = "ADD SONGS", fontSize = 18.sp) // Increased font size of the button text
+                    Text(text = "ADD SONGS", fontSize = 18.sp)
                 }
             }
         }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.gms.google-services")
 }
 
 configurations { implementation.get().exclude(mapOf("group" to "org.jetbrains", "module" to "annotations"))}
@@ -76,4 +77,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.45")
     implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     //kapt("com.google.dagger:hilt-compiler:2.45")
+    implementation("androidx.compose.runtime:runtime-livedata:1.3.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore-ktx")
 }
