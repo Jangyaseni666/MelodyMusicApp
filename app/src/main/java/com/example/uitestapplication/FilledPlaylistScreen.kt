@@ -34,7 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun FilledPlaylistScreen(
-    playlistId: String, // Changed to String
+    playlistId: String,
     onBackClick: () -> Unit,
     onAddSongsClick: () -> Unit,
     playlistViewModel: PlaylistViewModel = viewModel()
@@ -62,7 +62,7 @@ fun FilledPlaylistScreen(
                     .padding(vertical = 8.dp)
             ) {
                 IconButton(
-                    onClick = onBackClick,
+                    onClick = { onBackClick() },
                     modifier = Modifier
                         .size(48.dp)
                 ) {
@@ -129,7 +129,6 @@ fun SongItem(song: Song) {
             fontSize = 18.sp,
             modifier = Modifier.weight(1f)
         )
-        // Optionally add more UI elements like play/pause button, etc.
     }
 }
 
@@ -137,7 +136,7 @@ fun SongItem(song: Song) {
 @Composable
 fun FilledPlaylistScreenPreview() {
     FilledPlaylistScreen(
-        playlistId = "1", // Changed to String
+        playlistId = "1",
         onBackClick = {},
         onAddSongsClick = {}
     )

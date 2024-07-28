@@ -23,7 +23,7 @@ fun AppNavHost(
     NavHost(navController = navController, startDestination = "your_playlists") {
         composable("your_playlists") {
             YourPlaylistsScreen(
-                navController = navController,  // Pass the navController
+                navController = navController,
                 playlists = playlists,
                 onCreatePlaylistClick = { playlistName ->
                     playlistViewModel.addPlaylist(playlistName)
@@ -49,7 +49,7 @@ fun AppNavHost(
 
             if (playlist != null) {
                 EmptyPlaylistScreen(
-                    onBackClick = { navController.popBackStack() },
+                    onBackClick = { navController.navigate("your_playlists") },
                     playlistName = playlist.name,
                     onAddSongsClick = { navController.navigate("add_songs/$playlistId") }
                 )
@@ -64,7 +64,7 @@ fun AppNavHost(
             if (playlist != null) {
                 FilledPlaylistScreen(
                     playlistId = playlistId,
-                    onBackClick = { navController.popBackStack() },
+                    onBackClick = { navController.navigate("your_playlists") },
                     onAddSongsClick = { navController.navigate("add_songs/$playlistId") }
                 )
             } else {
@@ -84,7 +84,10 @@ fun AppNavHost(
                                 popUpTo("filled_playlist/$playlistId") { inclusive = true }
                             }
                         } else {
-                            navController.popBackStack()
+                            navController.navigate("your_playlists") {
+                                // Clear the back stack to avoid navigating back to the add songs screen
+                                popUpTo("your_playlists") { inclusive = true }
+                            }
                         }
                     },
                     onAddSong = { song -> playlistViewModel.addSongToPlaylist(playlistId, song) }
