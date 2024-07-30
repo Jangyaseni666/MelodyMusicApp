@@ -91,6 +91,31 @@ class PlaylistViewModel : ViewModel() {
         }
     }
 
+    fun deletePlaylist(playlistId: String) {
+        viewModelScope.launch {
+            db.collection("playlists").document(playlistId).delete()
+                .addOnSuccessListener {
+                    // Playlist deleted successfully
+                }
+                .addOnFailureListener { e ->
+                    e.printStackTrace()
+                }
+        }
+    }
+
+    fun updatePlaylistName(playlistId: String, newName: String) {
+        viewModelScope.launch {
+            val playlistRef = db.collection("playlists").document(playlistId)
+            playlistRef.update("name", newName)
+                .addOnSuccessListener {
+                    // Playlist name updated successfully
+                }
+                .addOnFailureListener { e ->
+                    e.printStackTrace()
+                }
+        }
+    }
+
     private fun generateNewPlaylistId(): String {
         return db.collection("playlists").document().id
     }

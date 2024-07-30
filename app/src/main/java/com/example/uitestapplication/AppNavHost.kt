@@ -8,13 +8,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-
 @Composable
 fun AppNavHost(
     navController: NavHostController,
     playlistViewModel: PlaylistViewModel = hiltViewModel()
 ) {
-    // Collect playlists and dialog state from ViewModel
     val playlistsState = playlistViewModel.playlists.collectAsState()
     val playlists = playlistsState.value
     val showSuccessDialogState = playlistViewModel.showSuccessDialog.collectAsState()
@@ -49,7 +47,8 @@ fun AppNavHost(
 
             if (playlist != null) {
                 EmptyPlaylistScreen(
-                    onBackClick = { navController.navigate("your_playlists") },
+                    playlistId = playlistId,
+                    onBackClick = { navController.popBackStack() },
                     playlistName = playlist.name,
                     onAddSongsClick = { navController.navigate("add_songs/$playlistId") }
                 )
@@ -64,8 +63,17 @@ fun AppNavHost(
             if (playlist != null) {
                 FilledPlaylistScreen(
                     playlistId = playlistId,
-                    onBackClick = { navController.navigate("your_playlists") },
-                    onAddSongsClick = { navController.navigate("add_songs/$playlistId") }
+                    onBackClick = {
+                        navController.navigate("your_playlists") {
+                            popUpTo("your_playlists") { inclusive = true }
+                        }
+                    },
+                    onAddSongsClick = { navController.navigate("add_songs/$playlistId") },
+                    onPlaylistDeleted = {
+                        navController.navigate("your_playlists") {
+                            popUpTo("filled_playlist/$playlistId") { inclusive = true }
+                        }
+                    }
                 )
             } else {
                 Text("Playlist not found")
@@ -80,12 +88,10 @@ fun AppNavHost(
                     onBackClick = { hasSelectedSongs ->
                         if (hasSelectedSongs) {
                             navController.navigate("filled_playlist/$playlistId") {
-                                // Clear the back stack to avoid navigating back to the add songs screen
                                 popUpTo("filled_playlist/$playlistId") { inclusive = true }
                             }
                         } else {
                             navController.navigate("your_playlists") {
-                                // Clear the back stack to avoid navigating back to the add songs screen
                                 popUpTo("your_playlists") { inclusive = true }
                             }
                         }
