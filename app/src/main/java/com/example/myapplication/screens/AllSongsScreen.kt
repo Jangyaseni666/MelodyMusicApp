@@ -22,11 +22,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,7 +49,7 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 
 @Composable
-fun HomeScreen(navController: NavController, viewModel: TracksViewModel) {
+fun AllSongsScreen(navController: NavController, viewModel: TracksViewModel) {
     var searchQuery by remember { mutableStateOf(TextFieldValue("")) }
     var selectedTab by remember { mutableStateOf("All Songs") }
     var selectedItem by remember { mutableStateOf<String?>(null) }

@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -64,6 +65,8 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.appcompat)
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -94,6 +97,30 @@ dependencies {
     implementation (libs.androidx.media3.exoplayer)
     implementation (libs.androidx.media3.ui)
     implementation (libs.androidx.navigation.compose)
+
+    implementation("androidx.compose.animation:animation:1.5.1") // Align with Compose version
+    implementation("androidx.navigation:navigation-compose:2.5.0")
+    implementation("com.google.dagger:hilt-android:2.45")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    //kapt("com.google.dagger:hilt-compiler:2.45")
+    implementation("androidx.compose.runtime:runtime-livedata:1.3.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.1.1"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
+    // Lifecycle Dependencies
+    val lifecycle_version = "2.8.2"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+
+    implementation("com.google.android.gms:play-services-auth:12.0.1")
+    implementation("io.coil-kt:coil-compose:2.2.2")
 
 
 }
