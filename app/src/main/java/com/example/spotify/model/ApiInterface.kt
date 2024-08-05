@@ -27,4 +27,16 @@ interface ApiInterface {
     fun getTracks(
         @Query("ids") ids: String
     ): Call<TrackDetailsResponse>
+
+    @Headers(
+        "x-rapidapi-key: 6abaafc88dmsh81cb72f07b2443ap1be866jsnbdf3ed7d9ced",
+        "x-rapidapi-host: spotify23.p.rapidapi.com"
+    )
+    @GET("recommendations")
+    fun getRecommendations(
+        @Query("limit") limit: Int = 10,
+        @Query("seed_genres") seedGenres: String = "",
+        @Query("seed_artists") seedArtists: String = "",
+        @Query("seed_tracks") seedTracks: String = ""
+    ): Call<TrackRecResponse>
 }
