@@ -76,7 +76,7 @@ fun WelcomeScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     OutlinedButton(
-                        onClick = { navController.navigate("main_login_screen") },
+                        onClick = { navController.navigate("auth_navigation") },
                         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.White),
                         modifier = Modifier.padding(top = 8.dp),
                         border = BorderStroke(1.dp, Color.White)
@@ -92,7 +92,8 @@ fun WelcomeScreen(navController: NavController) {
 @Preview
 @Composable
 fun WelcomeScreenPreview() {
-    // Preview setup with a dummy NavController for demonstration
+    // Provide a dummy NavController for preview purposes
     val navController = rememberNavController()
     WelcomeScreen(navController = navController)
 }
+

@@ -1,4 +1,4 @@
-package com.example.melodytest
+package com.example.myapplication.auth
 
 import android.content.Intent
 import android.content.IntentSender
@@ -12,14 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
-
-class AuthViewModel(private val googleAuthClient: GoogleAuthClient) : ViewModel() {
+class AuthViewModel : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
-
-    var googleSignInIntentSender: IntentSender? = null
-        private set
 
     private lateinit var verificationId: String
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
@@ -107,37 +103,6 @@ class AuthViewModel(private val googleAuthClient: GoogleAuthClient) : ViewModel(
                 _authState.value = AuthState.Success(user)
             } catch (e: Exception) {
                 _authState.value = AuthState.Error(e.message ?: "Unknown error occurred")
-            }
-        }
-    }
-
-    fun signInWithGoogle() {
-        viewModelScope.launch {
-            try {
-                val intentSender = googleAuthClient.signIn()
-                if (intentSender != null) {
-                    googleSignInIntentSender = intentSender
-                    _authState.value = AuthState.GoogleSignInStarted(intentSender)
-                } else {
-                    _authState.value = AuthState.GoogleSignInError("Failed to start Google sign-in")
-                }
-            } catch (e: Exception) {
-                _authState.value = AuthState.GoogleSignInError(e.message ?: "Failed to start Google sign-in")
-            }
-        }
-    }
-
-    fun handleGoogleSignInResult(intent: Intent) {
-        viewModelScope.launch {
-            try {
-                val signInResult = googleAuthClient.signInWithIntent(intent)
-                if (signInResult.data != null) {
-                    _authState.value = AuthState.GoogleSignInSuccess(signInResult.data)
-                } else {
-                    _authState.value = AuthState.GoogleSignInError(signInResult.errorMessage ?: "Google sign-in failed")
-                }
-            } catch (e: Exception) {
-                _authState.value = AuthState.GoogleSignInError(e.message ?: "Google sign-in failed")
             }
         }
     }

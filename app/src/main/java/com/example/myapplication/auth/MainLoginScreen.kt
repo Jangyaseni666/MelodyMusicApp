@@ -1,4 +1,4 @@
-package com.example.melodytest
+package com.example.myapplication.auth
 /*
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable

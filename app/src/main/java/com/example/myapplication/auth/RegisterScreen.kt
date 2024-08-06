@@ -1,4 +1,4 @@
-package com.example.melodytest
+package com.example.myapplication.auth
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*

@@ -1,4 +1,4 @@
-package com.example.melodytest
+package com.example.myapplication.auth
 
 import android.content.IntentSender
 import com.google.firebase.auth.FirebaseUser

@@ -1,18 +1,31 @@
-package com.example.melodytest
-/*
+package com.example.myapplication.auth
+
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PhoneInTalk
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,15 +36,13 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-//import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.myapplication.R
 
 @Composable
-fun SignInSignUpScreen(navController: NavHostController, authViewModel: AuthViewModel = viewModel()) {
-    val state by authViewModel.authState.collectAsStateWithLifecycle()
-
+fun SignInSignUpScreen(navController: NavHostController) {
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -49,9 +60,9 @@ fun SignInSignUpScreen(navController: NavHostController, authViewModel: AuthView
                 modifier = Modifier.padding(vertical = 32.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.logo),
+                    painter = painterResource(id = R.drawable.melody),
                     contentDescription = "Logo",
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Text(
                     text = "Just keep on vibin’",
@@ -81,24 +92,34 @@ fun SignInSignUpScreen(navController: NavHostController, authViewModel: AuthView
                     .fillMaxWidth(0.8f)
                     .padding(bottom = 16.dp)
             ) {
-                Icon(
-                    Icons.Filled.PhoneInTalk,
+                Image(
+                    painter = painterResource(id = R.drawable.phone_icon), // Replace with your image resource
                     contentDescription = "Phone Icon",
-                    modifier = Modifier.size(24.dp),
-                    tint = Color.White
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Continue with Phone Number", color = Color.White)
             }
-
+/*
             // Continue with Google Button
-            GoogleSignInButton(
-                authViewModel = authViewModel,
-                onSignInResult = { result ->
-                    authViewModel.handleGoogleSignInResult(result.data ?: return@GoogleSignInButton)
-                },
-                isSignInSuccessful = state is AuthState.GoogleSignInSuccess
-            )
+            OutlinedButton(
+                onClick = { /* Handle Continue with Google */ },
+                border = BorderStroke(1.dp, Color.White),
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .padding(bottom = 16.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.google_icon),
+                    contentDescription = "Google Icon",
+                    tint = Color.Unspecified, // Use Color.Unspecified to keep original colors
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(text = "Continue with Google", color = Color.White)
+            }
+
+ */
 
             // Login Text with Navigation
             val annotatedText = buildAnnotatedString {
@@ -114,40 +135,3 @@ fun SignInSignUpScreen(navController: NavHostController, authViewModel: AuthView
         }
     }
 }
-
-@Composable
-fun GoogleSignInButton(
-    authViewModel: AuthViewModel,
-    onSignInResult: (androidx.activity.result.ActivityResult) -> Unit,
-    isSignInSuccessful: Boolean
-) {
-    val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult(),
-        onResult = { result ->
-            onSignInResult(result)
-        }
-    )
-
-    // Launch effect to react to successful sign-in
-    LaunchedEffect(key1 = isSignInSuccessful) {
-        if (isSignInSuccessful) {
-            Toast.makeText(
-                context,
-                "Sign in successful",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-
-    Button(onClick = {
-        authViewModel.signInWithGoogle()
-        // This line should be inside the onClick handler of the actual Google Sign-In process
-        authViewModel.googleSignInIntentSender?.let { intentSender ->
-            launcher.launch(IntentSenderRequest.Builder(intentSender).build())
-        }
-    }) {
-        Text("Sign In with Google")
-    }
-}
-*/

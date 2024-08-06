@@ -1,4 +1,4 @@
-package com.example.melodytest
+package com.example.myapplication.auth
 
 import android.content.Context
 import android.content.Intent

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myapplication.auth.AuthNavigation
 import com.example.myapplication.screens.AllSongsScreen
 import com.example.myapplication.screens.SplashScreen
 import com.example.myapplication.screens.TrackDetailsScreen
@@ -20,22 +21,23 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AppNavigation()
+            AppNavigation(viewModel)
         }
     }
 
     @Composable
-    fun AppNavigation() {
+    fun AppNavigation(viewModel: TracksViewModel) {
         val navController = rememberNavController()
 
         NavHost(navController = navController, startDestination = "splash_screen") {
             composable("splash_screen") { SplashScreen(navController) }
-            composable("main_screen") { WelcomeScreen() }
+            composable("main_screen") { WelcomeScreen(navController) }
             composable("home") { AllSongsScreen(navController, viewModel) }
             composable("trackDetails/{trackId}") { backStackEntry ->
                 val trackId = backStackEntry.arguments?.getString("trackId")
                 TrackDetailsScreen(navController, trackId, viewModel)
             }
+            composable("auth_navigation") { AuthNavigation() }
         }
     }
     override fun onDestroy() {
