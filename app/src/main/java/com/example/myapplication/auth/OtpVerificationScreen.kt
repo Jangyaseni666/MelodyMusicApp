@@ -58,7 +58,7 @@ fun OtpVerificationScreen(navController: NavController, viewModel: AuthViewModel
             when (authState) {
                 is AuthState.Success -> {
                     LaunchedEffect(authState) {
-                        navController.navigate("success")
+                        navController.navigate("home")
                     }
                 }
                 is AuthState.Error -> {

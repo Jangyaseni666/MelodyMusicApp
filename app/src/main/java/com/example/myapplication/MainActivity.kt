@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
         NavHost(navController = navController, startDestination = "splash_screen") {
             composable("splash_screen") { SplashScreen(navController) }
             composable("main_screen") { WelcomeScreen(navController) }
-            composable("home") { AllSongsScreen(navController, viewModel) }
+            composable("all_songs") { AllSongsScreen(navController, viewModel) }
             composable("trackDetails/{trackId}") { backStackEntry ->
                 val trackId = backStackEntry.arguments?.getString("trackId")
                 TrackDetailsScreen(navController, trackId, viewModel)

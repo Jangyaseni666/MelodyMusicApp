@@ -77,7 +77,7 @@ fun SignInScreen(navController: NavHostController, viewModel: AuthViewModel = vi
 
             when (authState) {
                 is AuthState.Success -> {
-                    navController.navigate("success") {
+                    navController.navigate("home") {
                         popUpTo(navController.graph.startDestinationId) {
                             inclusive = true
                         }

@@ -72,7 +72,7 @@ fun PhoneInputScreen(navController: NavController, viewModel: AuthViewModel = vi
 
             if (authState is AuthState.Success) {
                 LaunchedEffect(authState) {
-                    navController.navigate("success")
+                    navController.navigate("home")
                 }
             } else if (authState is AuthState.Error) {
                 Text("Error: ${(authState as AuthState.Error).message}", color = Color.White)

@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.myapplication.screens.HomeScreen
 
 @Composable
 fun AuthNavigation(viewModel: AuthViewModel = viewModel()) {
@@ -20,14 +21,14 @@ fun AuthNavigation(viewModel: AuthViewModel = viewModel()) {
         composable("otpVerification") {
             OtpVerificationScreen(navController = navController, viewModel = viewModel)
         }
-        composable("success") {
-            SuccessScreen(navController = navController, viewModel = viewModel)
-        }
         composable("register") {
             RegisterScreen(navController = navController, viewModel = viewModel)
         }
         composable("signin") {
             SignInScreen(navController = navController, viewModel = viewModel)
+        }
+        composable("home") {
+            HomeScreen(navController = navController)
         }
     }
 }
